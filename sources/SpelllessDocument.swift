@@ -86,12 +86,14 @@ enum SpelllessDocument {
   ///
   /// Empty *marked* text over the same range is honoured, because replacing
   /// document text with a composition is exactly what the third argument of
-  /// `setMarkedText` is for.  Unmarking immediately afterwards commits
-  /// nothing, there being nothing marked.
+  /// `setMarkedText` is for.
+  ///
+  /// The caller ends the composition afterwards: `unmarkText` belongs to the
+  /// input controller, not to the client, and there is nothing marked to
+  /// commit by then in any case.
   static func remove(range: NSRange, client: IMKTextInput) {
     client.setMarkedText("", selectionRange: NSRange(location: 0, length: 0),
                          replacementRange: range)
-    client.unmarkText()
   }
 
   /// Where the composition sits, preferring the marked range and falling back

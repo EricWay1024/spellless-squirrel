@@ -587,6 +587,7 @@ private extension SquirrelInputController {
           // word back into the composition, or `word_backspace` deleting one.
           // An empty insertText is widely ignored -- see the note there.
           SpelllessDocument.remove(range: range, client: client)
+          unmarkText()
         } else {
           client.insertText(string, replacementRange: range)
         }
