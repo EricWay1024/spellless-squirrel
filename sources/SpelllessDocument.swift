@@ -88,9 +88,12 @@ enum SpelllessDocument {
   /// document text with a composition is exactly what the third argument of
   /// `setMarkedText` is for.
   ///
-  /// The caller ends the composition afterwards: `unmarkText` belongs to the
-  /// input controller, not to the client, and there is nothing marked to
-  /// commit by then in any case.
+  /// Nothing unmarks afterwards, and nothing needs to.  `unmarkText` is on
+  /// neither IMKTextInput nor IMKInputController -- Squirrel itself ends a
+  /// composition by setting empty marked text, which is what this already
+  /// leaves behind.  For `absorb_fragment` the next update marks the fragment
+  /// over it a moment later; for `word_backspace` it stays empty, which is
+  /// nothing at all.
   static func remove(range: NSRange, client: IMKTextInput) {
     client.setMarkedText("", selectionRange: NSRange(location: 0, length: 0),
                          replacementRange: range)
