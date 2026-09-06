@@ -409,6 +409,15 @@ private extension SquirrelInputController {
       }
     }
 
+    // Spellless: what is actually behind the caret, before the schema decides
+    // anything about spacing, capitalisation or taking a space back.  Set on
+    // every key because it is what the *next* keystroke's rules are read
+    // against; an application that will not answer leaves it untouched, and
+    // the schema falls back to Rime's commit history as it always did.
+    if let surrounding = SpelllessDocument.surroundingText(client: client) {
+      rimeAPI.set_property(session, "surrounding_text", surrounding)
+    }
+
     let handled = rimeAPI.process_key(session, Int32(rimeKeycode), Int32(rimeModifiers))
 
     if !handled {
@@ -561,6 +570,26 @@ private extension SquirrelInputController {
 
   func commit(string: String) {
     guard let client = client else { return }
+
+    // Spellless: a commit may begin with U+0008 characters, one per character
+    // of the document it is asking to take back -- the automatic space before
+    // a full stop, or the fragment of a word being re-typed.  See
+    // SpelllessDocument, which also decides whether the request is safe.
+    //
+    // Everything is checked before anything is written, and a refusal is
+    // silent by design: the commit lands on its own, spare space and all,
+    // which is exactly the behaviour of a frontend that never heard of this.
+    let (erase, string) = SpelllessRules.split(commit: string)
+    if erase > 0 {
+      if let range = SpelllessDocument.replacementRange(client: client, erase: erase, text: string) {
+        client.insertText(string, replacementRange: range)
+        preedit = ""
+        hidePalettes()
+        return
+      }
+      // Refused, or the client would not say where it is.  Fall through and
+      // commit the text without the reclaim.
+    }
 
     let forceMarkedText =
       session != 0 &&

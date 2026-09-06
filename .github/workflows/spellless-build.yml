@@ -1,0 +1,58 @@
+name: spellless build
+
+# Builds the Spellless flavour of Squirrel on every push, and attaches the
+# .pkg to the run.  The point is that nobody needs a Mac to get here: GitHub's
+# macOS runners are real ones, and upstream's own release CI is this same
+# shape.
+#
+# What this cannot do is tell you whether the document-editing features work.
+# That is a property of each client application's NSTextInputClient, not of
+# this code, and it needs a person typing into TextEdit, Chrome, Terminal and
+# VS Code on a real machine.  See SPELLLESS.md.
+
+on:
+  push:
+    branches: [spellless]
+    tags: ['*']
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: macos-26
+    steps:
+      - name: Set Xcode version
+        uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: '26.5'
+
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+          submodules: true
+
+      # The decisions, tested without an Xcode target and without a logged-in
+      # Mac.  First, because a rule that is wrong here is wrong in every
+      # application and there is no point building the rest to find out.
+      - name: Test the reclaim rules
+        run: |
+          swiftc -O -parse-as-library \
+            sources/SpelllessRules.swift tests/SpelllessRulesTests.swift \
+            -o "$RUNNER_TEMP/rules"
+          "$RUNNER_TEMP/rules"
+
+      # action-build.sh runs action-install.sh itself, then `make archive`,
+      # which builds the .app, wraps it in package/Squirrel.pkg and zips it.
+      - name: Build
+        run: ./action-build.sh archive
+
+      - name: What came out
+        run: ls -la package/
+
+      - name: Upload the installer
+        uses: actions/upload-artifact@v4
+        with:
+          name: Squirrel-Spellless
+          path: package/*.pkg
+          if-no-files-found: error
+          retention-days: 30
