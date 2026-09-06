@@ -75,6 +75,25 @@ enum SpelllessDocument {
     return NSRange(location: marked.location - erase, length: erase + marked.length)
   }
 
+  /// Take `range` out of the document, inserting nothing.
+  ///
+  /// `insertText("", replacementRange:)` is the obvious way to write this and
+  /// it does not work: a great many NSTextInputClient implementations treat an
+  /// empty insert as nothing to do and ignore the range with it.  That is why
+  /// reclaiming a space before a full stop worked from the first build --
+  /// there is a full stop to insert -- while absorbing a half-typed word,
+  /// which inserts nothing at all, did not.
+  ///
+  /// Empty *marked* text over the same range is honoured, because replacing
+  /// document text with a composition is exactly what the third argument of
+  /// `setMarkedText` is for.  Unmarking immediately afterwards commits
+  /// nothing, there being nothing marked.
+  static func remove(range: NSRange, client: IMKTextInput) {
+    client.setMarkedText("", selectionRange: NSRange(location: 0, length: 0),
+                         replacementRange: range)
+    client.unmarkText()
+  }
+
   /// Where the composition sits, preferring the marked range and falling back
   /// to the caret.  nil when the client will not say -- plenty of them will
   /// not, and they simply get the behaviour they had before.

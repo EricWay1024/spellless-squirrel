@@ -582,7 +582,14 @@ private extension SquirrelInputController {
     let (erase, string) = SpelllessRules.split(commit: string)
     if erase > 0 {
       if let range = SpelllessDocument.replacementRange(client: client, erase: erase, text: string) {
-        client.insertText(string, replacementRange: range)
+        if string.isEmpty {
+          // Nothing to insert: this is `absorb_fragment` taking a half-typed
+          // word back into the composition, or `word_backspace` deleting one.
+          // An empty insertText is widely ignored -- see the note there.
+          SpelllessDocument.remove(range: range, client: client)
+        } else {
+          client.insertText(string, replacementRange: range)
+        }
         preedit = ""
         hidePalettes()
         return

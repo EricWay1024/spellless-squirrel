@@ -20,8 +20,17 @@ The frontend does not have to guess. It holds an `IMKTextInput` and can look.
    32 characters before the composition, read with
    `attributedSubstring(from:)`.
 2. **Commits that take text back** — a commit beginning with U+0008 characters
-   asks for that many characters of the document to be reclaimed. It becomes
-   an `insertText(_:replacementRange:)` over a range extending backwards.
+   asks for that many characters of the document to be reclaimed. With text to
+   insert that is an `insertText(_:replacementRange:)` over a range extending
+   backwards; with nothing to insert it is empty *marked* text over the same
+   range, followed by `unmarkText`.
+
+   The second case is not a stylistic choice. `insertText("", replacementRange:)`
+   is what you would write and a great many clients ignore it — an empty insert
+   reads as nothing to do, and the range goes with it. That is exactly why
+   reclaiming the space before a full stop worked in the first build, where
+   there is a full stop to insert, while absorbing a half-typed word, which
+   inserts nothing at all, did not.
 
 That is the whole contract, and it is the same one
 [spellless-weasel](https://github.com/EricWay1024/spellless-weasel) implements
