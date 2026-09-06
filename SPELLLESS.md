@@ -18,7 +18,7 @@ The frontend does not have to guess. It holds an `IMKTextInput` and can look.
 
 1. **`surrounding_text`** — the Rime property is set on every keystroke to the
    32 characters before the composition, read with
-   `attributedSubstring(from:actualRange:)`.
+   `attributedSubstring(from:)`.
 2. **Commits that take text back** — a commit beginning with U+0008 characters
    asks for that many characters of the document to be reclaimed. It becomes
    an `insertText(_:replacementRange:)` over a range extending backwards.

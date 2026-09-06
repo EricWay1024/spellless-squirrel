@@ -47,7 +47,7 @@ enum SpelllessDocument {
 
     let wanted = min(anchor, SpelllessRules.surroundingChars)
     let range = NSRange(location: anchor - wanted, length: wanted)
-    return client.attributedSubstring(from: range, actualRange: nil)?.string
+    return client.attributedSubstring(from: range)?.string
   }
 
   // MARK: - writing
@@ -66,7 +66,7 @@ enum SpelllessDocument {
     }
 
     let behindRange = NSRange(location: marked.location - erase, length: erase)
-    guard let behind = client.attributedSubstring(from: behindRange, actualRange: nil)?.string,
+    guard let behind = client.attributedSubstring(from: behindRange)?.string,
           behind.count == erase,
           SpelllessRules.mayReclaim(behind: behind, replacement: text)
     else {
