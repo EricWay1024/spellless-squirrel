@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  The update feed for the Spellless build of Squirrel.
+
+  It is deliberately empty.  Sparkle is compiled into this app and cannot be
+  removed without touching code that CI's unused-code scan would then reject,
+  so instead it is pointed here, at a feed with nothing in it, and automatic
+  checking is off.  Nothing is ever offered.
+
+  What it must not point at is rime/squirrel's own feed, which is where it
+  pointed until now.  See SPARKLE.md for what that did and what publishing
+  real updates from here would take.
+-->
+<rss version="2.0" xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle">
+  <channel>
+    <title>Spellless Squirrel</title>
+    <link>https://raw.githubusercontent.com/EricWay1024/spellless-squirrel/spellless/appcast.xml</link>
+    <description>Updates for the Spellless build of Squirrel.</description>
+    <language>en</language>
+  </channel>
+</rss>
