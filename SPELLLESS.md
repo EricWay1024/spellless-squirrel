@@ -38,9 +38,15 @@ on Windows against TSF — where it needs `ITfComposition::ShiftStart`, an edit
 session and an IPC hop to carry the text between the two processes. Here it is
 two functions.
 
-Three schema features ride on it: punctuation takes its automatic space back,
-a word you re-type is picked up mid-word, and Backspace deletes a whole word.
-All three ship **off** and are switched on in `spellless.custom.yaml`.
+Three schema features ride on the reclaim half: punctuation takes its
+automatic space back (`reclaim_space`, which ships **on**), a word you re-type
+is picked up mid-word (`absorb_fragment`, **off**), and Backspace deletes a
+whole word (`word_backspace`, **off**). A fourth rides on `surrounding_text`
+alone, deleting nothing and so needing no permission to edit: a caret sitting
+inside a word means plain typing until the next space (`ascii_fragment`, which
+ships **on**). Each is a `spellless/<name>` key in the schema and a switch of
+the same name in the <kbd>F4</kbd> menu, so the two that ship off can be tried
+without editing a file.
 
 ## What is checked, and what is not
 

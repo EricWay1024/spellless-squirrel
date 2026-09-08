@@ -1,3 +1,35 @@
+> ### This is not stock 鼠鬚管 / Squirrel
+>
+> It is [rime/squirrel](https://github.com/rime/squirrel) with the two things
+> the [Spellless](https://github.com/EricWay1024/spellless) schema needs from a
+> frontend and cannot do for itself. Everything below this box is upstream's
+> README, unmodified — including its badges, which point at upstream.
+>
+> [![Spellless build](https://github.com/EricWay1024/spellless-squirrel/actions/workflows/spellless-build.yml/badge.svg?branch=spellless)](https://github.com/EricWay1024/spellless-squirrel/actions/workflows/spellless-build.yml)
+> [![Download](https://img.shields.io/github/v/release/EricWay1024/spellless?label=download)](https://github.com/EricWay1024/spellless/releases/latest)
+>
+> **What it adds.** The frontend can see the document, and a schema cannot: it
+> publishes the 32 characters before the composition as Rime's
+> `surrounding_text`, and it honours a commit that begins with U+0008 by taking
+> that many characters of the document back. Two functions, one convention —
+> [SPELLLESS.md](SPELLLESS.md) has the whole of it, including the case that
+> needs empty *marked* text rather than an empty insert.
+>
+> **Where to get it.** `Spellless-Squirrel-<version>.pkg`, on the
+> [Spellless releases page](https://github.com/EricWay1024/spellless/releases).
+> It carries no schema — pair it with the `spellless-<version>.zip` there. It
+> is unsigned, as upstream's own releases are: right-click → **Open** the first
+> time. It installs as ordinary Squirrel, so it takes the place of a Squirrel
+> you already have, and macOS will ask you to log out and back in.
+>
+> **It never updates itself.** Sparkle is compiled in but its feed is empty and
+> automatic checks are off, because an update from upstream's feed would
+> install stock Squirrel over this build and take the document features with
+> it, silently. [SPARKLE.md](SPARKLE.md) says what that would have looked like
+> and what publishing real updates from here would take.
+>
+> Licensed GPL-3.0, as upstream is.
+
     鼠鬚管
     爲物雖微情不淺
     新詩醉墨時一揮
