@@ -101,10 +101,16 @@
 	<true/>
 	<key>NSPrincipalClass</key>
 	<string>NSApplication</string>
+	<!-- Sparkle: see SPARKLE.md.  This build must never be updated from
+	     rime/squirrel's feed - an upstream release installs over it and takes
+	     the four document features with it, silently.  The feed below is our
+	     own and currently carries no items, so nothing is ever offered; the
+	     key is still upstream's and MUST be replaced before the first signed
+	     item is published. -->
 	<key>SUEnableAutomaticChecks</key>
-	<true/>
+	<false/>
 	<key>SUFeedURL</key>
-	<string>https://rime.github.io/release/squirrel/appcast.xml</string>
+	<string>https://raw.githubusercontent.com/EricWay1024/spellless-squirrel/spellless/appcast.xml</string>
 	<key>SUPublicEDKey</key>
 	<string>ukvWq2dKOWn3B9AsdsQIwOptiDdDKdUjAVNgFxSvB2o=</string>
 	<key>TICapsLockLanguageSwitchCapable</key>
